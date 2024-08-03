@@ -1,0 +1,5 @@
+[package]
+name = "anshere"
+version = "1.0.0"
+entrypoint = "anshere.typ"
+compiler = "0.11.1"
