@@ -9,12 +9,12 @@
 
   ..(q(),) * 3, // 繰り返しを使うと便利
   q-break,
-  
+
   q(content: [#h(1fr)m / s]), // contentで解答欄に書き込み
   q(content: [#h(1fr)T#h(10pt)/#h(10pt)F#h(1fr)]),
   q(label: [$2x + 1$]), // labelで質問番号を自由に変更
   q-break,
-  
+
   q(counter-reset: 1), // counter-resetで質問番号をリセット
   q(),
   q-blank,
@@ -36,7 +36,7 @@
   q(counter-skip: 1),
   q(),
   q-break,
-  
+
   q(counter-reset: 1),
   q(),
   q(counter-skip: -1),
@@ -57,15 +57,38 @@
   )),
 ))
 
-#anshere((
-  q(children: (
-    q(),
+#anshere(
+  (
     q(children: (
       q(),
       q(children: (
         q(),
-        q(),
+        q(children: (
+          q(),
+          q(),
+        )),
       )),
     )),
-  )),
-), numberings: ("1", "1", "(1)", "あ", "a")) // 質問番号の形式を一括指定
+  ),
+  numberings: ("1", "1", "(1)", "あ", "a"), // 質問番号の形式を一括指定
+)
+
+
+#anshere(
+  (
+    q(children: (
+      q(),
+      q(
+        hide-numbering: true, // children内で質問番号を非表示
+        children: (
+          q(),
+          q(children: (
+            q(),
+            q(),
+          )),
+        ),
+      ),
+    )),
+  ),
+  numberings: ("1", "1", "(1)", "あ", "a"),
+)

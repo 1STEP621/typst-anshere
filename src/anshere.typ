@@ -32,7 +32,11 @@
         columns: (
           if question.label == auto {
             if question.numbering-width == auto {
-              27pt
+              if question.hide-numbering {
+                0pt
+              } else {
+                27pt
+              }
             } else {
               question.numbering-width
             }
@@ -45,59 +49,54 @@
           },
           1fr,
         ),
-        grid.cell(
-          inset: 10pt,
-          stroke: if question.hide-numbering {
-            (top: 1pt, bottom: 1pt, left: 1pt, right: none)
-          } else {
-            1pt
-          },
-          align: horizon + center,
-          [
-            #counter.step(level: depth)
-            #context {
-              if question.counter-reset != none {
-                let value = {
-                  let x = counter.get()
-                  x.at(depth - 1) = question.counter-reset
-                  x
+        if (not question.hide-numbering) {
+          grid.cell(
+            inset: 10pt,
+            stroke: 1pt,
+            align: horizon + center,
+            [
+              #counter.step(level: depth)
+              #context {
+                if question.counter-reset != none {
+                  let value = {
+                    let x = counter.get()
+                    x.at(depth - 1) = question.counter-reset
+                    x
+                  }
+                  counter.update(value)
                 }
-                counter.update(value)
               }
-            }
-            #context {
-              if question.counter-skip != none {
-                let value = {
-                  let x = counter.get()
-                  x.at(depth - 1) = x.at(depth - 1) + question.counter-skip
-                  x
+              #context {
+                if question.counter-skip != none {
+                  let value = {
+                    let x = counter.get()
+                    x.at(depth - 1) = x.at(depth - 1) + question.counter-skip
+                    x
+                  }
+                  counter.update(value)
                 }
-                counter.update(value)
               }
-            }
-            #let fmt = if question.numbering == auto {
-              numberings.at(depth - 1)
-            } else {
-              question.numbering
-            }
-            #context if question.hide-numbering {
-              [#sym.zws]
-            } else {
-              if question.label == auto {
+              #let fmt = if question.numbering == auto {
+                numberings.at(depth - 1)
+              } else {
+                question.numbering
+              }
+              #context if question.label == auto {
                 numbering(fmt, counter.get().last())
               } else {
                 [#question.label#sym.zws] // 行の高さがずれるのを防ぐ
               }
-            }
-          ],
-        ),
+            ],
+          )
+        } else {
+          grid.cell(
+            inset: 10pt,
+            [#sym.zws],
+          )
+        },
         if question.children == none {
           grid.cell(
-            stroke: if question.hide-numbering {
-              (top: 1pt, bottom: 1pt, left: none, right: 1pt)
-            } else {
-              1pt
-            },
+            stroke: 1pt,
             inset: 10pt,
             align: horizon,
             question.content,
